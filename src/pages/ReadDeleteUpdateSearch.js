@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import moment from "moment";
 
-export default function ReadOrDelete() {
+export default function ReadDeleteUpdateSearch() {
     // Read
-
+    
     const [isDeleting, setIsDeleting] = useState(false);
 
-    function useRead() {
+    function useRead(isDeleting) {
         const [isFetching, setIsFetching] = useState(true);
         const [people, setPeople] = useState([]);
 
@@ -25,18 +25,18 @@ export default function ReadOrDelete() {
                 }).catch(err => {
                     console.log(err)
                 })
-        }, [isFetching])
+        }, [isFetching, isDeleting])
 
         return { isFetching, people }
     }
 
-    const { isFetching, people } = useRead();
+    const { isFetching, people } = useRead(isDeleting);
     
     // Delete
-    function handleDelete(e){
+    function handleDelete(e, personId){
         e.preventDefault()
         setIsDeleting(true);
-        fetch(`${process.env.REACT_APP_PROXY}/api/karyawan/delete`, {
+        fetch(`${process.env.REACT_APP_PROXY}/api/karyawan/delete/${personId}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
