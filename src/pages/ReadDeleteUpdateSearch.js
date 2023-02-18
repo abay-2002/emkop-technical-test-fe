@@ -1,38 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import moment from "moment";
+import useRead from "../costumHooks/useRead";
 
 export default function ReadDeleteUpdateSearch() {
-    // Read
     
+    // Read using costum hooks
     const [isDeleting, setIsDeleting] = useState(false);
-
-    function useRead(isDeleting) {
-        const [isFetching, setIsFetching] = useState(true);
-        const [people, setPeople] = useState([]);
-
-        useEffect(() => {
-            fetch(`${process.env.REACT_APP_PROXY}/api/karyawan`, {
-                method: 'GET',
-            })
-                .then(res => {
-                    return res.json()
-                }).then(response => {
-                    setIsFetching(false)
-                    setPeople(response)
-                    console.log(response)
-                }).catch(err => {
-                    console.log(err)
-                })
-        }, [isFetching, isDeleting])
-
-        return { isFetching, people }
-    }
-
     const { isFetching, people } = useRead(isDeleting);
     
-    // Delete
+    // Delete event handler
     function handleDelete(e, personId){
         e.preventDefault()
         setIsDeleting(true);
@@ -44,22 +22,21 @@ export default function ReadDeleteUpdateSearch() {
             },
         }).then(res => {
             return res.json()
-        }).then(response => {
+        }).then( _ => {
             setIsDeleting(false)
-            console.log(response)
         }).catch(err => {
             console.log(err)
         })
     }
 
-    // Update
+    // Update event handler
     const [isUpdating, setIsUpdating] = useState(false);
     function updateHandler(e){
         e.preventDefault()
         setIsUpdating(true)
     }
 
-    // search
+    // search event handler
     const [searchId, setSearchId] = useState(null);
     
     const [ searchData, setSearchData ] = useState(null);
@@ -72,9 +49,7 @@ export default function ReadDeleteUpdateSearch() {
    
     function searchHandler(e, searchId){
         setIsSearching(true);
-        console.log(searchId)
 
-        
         e.preventDefault();
         fetch(`${process.env.REACT_APP_PROXY}/api/karyawan/search/${searchId}`, {
             method: 'GET',
@@ -84,7 +59,6 @@ export default function ReadDeleteUpdateSearch() {
         }).then(response => {
             setIsSearching(false);
             setSearchData(response)
-            console.log(response)
         }).catch(err => {
             console.log(err)
         })
