@@ -25,7 +25,7 @@ export default function ReadOrDelete() {
                 }).catch(err => {
                     console.log(err)
                 })
-        }, [isFetching, isDeleting])
+        }, [isFetching])
 
         return { isFetching, people }
     }
